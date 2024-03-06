@@ -1,6 +1,10 @@
 package bcrypt
 
-import "testing"
+import (
+	"fmt"
+	"regexp"
+	"testing"
+)
 
 const testHash = "$2y$12$YL07vqXL41V/i6me45MBo.seJUTBkm6F0FrmGv7p9vVR8OtJxyC1S"
 const testPassword = "testing123"
@@ -13,9 +17,21 @@ func TestFromHash(t *testing.T) {
 }
 
 func TestFromPassword(t *testing.T) {
-	_, err := FromPassword(testPassword, 12)
+	cost := 12
+	hash, err := FromPassword(testPassword, cost)
 	if err != nil {
-		t.Fatalf("FromPassword(\"%s\", 12) failed with error: %v", testPassword, err)
+		t.Fatalf("FromPassword(\"%s\", %d) failed with error: %v", testPassword, cost, err)
+	}
+
+	regex := fmt.Sprintf("^\\$2a\\$%d\\$.+$", cost)
+	m, err1 := regexp.MatchString(regex, hash.String())
+
+	if err1 != nil {
+		t.Fatalf("Regex check failed with error: %v", err1)
+	}
+
+	if !m {
+		t.Fatalf("String representation of hash did not match regex: \"%s\"", regex)
 	}
 }
 
