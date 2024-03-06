@@ -1,4 +1,4 @@
-module bcrypt
+module github.com/sicet7/go-modules/hashing/bcrypt
 
 go 1.21
 
