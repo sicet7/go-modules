@@ -3,15 +3,16 @@ package gcm
 import (
 	"encoding/base64"
 	"encoding/hex"
+	"strings"
 	"testing"
 )
 
 // do not use this in production!!!
 const testKey = "b214cb5caea5461988c490f65970b41b"
 const testData = "this is a test string"
-const testDecryptKey = "y_ErowNOvkHjnJZfpkLVtYKG4HTms8N3"
-const testDecryptSource = "test"
-const testDecryptData = "7nO3xcHMLQpt3555w9zK_ZIuhdPEtObAITJV9rMB5rA="
+const testDecryptKey = "tissemand"
+const testDecryptSource = "This is the input text that was encrypted."
+const testDecryptData = "TSd/Ul/TWkPIzDz0wudAxo8iViFtKFflcDrLu+nTsLJHr2ynHwcwhqwONxsMHz3cAz9q0S+9SEU+c5E5Xn8ubQXSFreL3vn2Dn5LP58TaWZ4HcK1ino="
 
 func TestEncrypt(t *testing.T) {
 	data := []byte(testData)
@@ -55,7 +56,7 @@ func TestEncryptString(t *testing.T) {
 }
 
 func TestDecrypt(t *testing.T) {
-	data, err := base64.URLEncoding.DecodeString(testDecryptData)
+	data, err := base64.URLEncoding.DecodeString(strings.ReplaceAll(strings.ReplaceAll(testDecryptData, "+", "-"), "/", "_"))
 	if err != nil {
 		t.Fatalf("Failed to decode test data: %v", err)
 	}
